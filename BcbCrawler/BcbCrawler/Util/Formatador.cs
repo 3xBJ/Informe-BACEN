@@ -1,60 +1,44 @@
-﻿using System;
-
-namespace BcbCrawler.Util
+﻿namespace BcbCrawler.Util
 {
     public static class Formatador
     {
-        static readonly int largura1 = 108;
-        static readonly int largura2 = 25;
-        static readonly int largura3 = 17;
-        static readonly int largura4 = 25;
+        static readonly string espaco = "&ensp;";
+        static readonly string abreTDEsquerda = "<td style = 'border: 1px solid #dddddd; text-align: left'>";
+        static readonly string abreTD = "<td style = 'border: 1px solid #dddddd'>";
+        static readonly string abreTH = "<th style = 'border: 1px solid #dddddd'>";
 
-        public static string PrintaSeparador(int largura)
+        public static string PrintaCabecalho(string titulo, string data, string arquivo)
         {
-            return new string('-', largura);
+            string linha =  abreTH + titulo  + espaco + "</th>" +
+                            abreTH + data    + espaco + "</th>" +
+                            abreTH + arquivo + espaco + "</th>";
+            return linha;
+        }
+
+        public static string PrintaCabecalho(string titulo, string documento, string data, string arquivo)
+        {
+            string linha =  abreTH + titulo    + espaco + "</th>" +
+                            abreTH + documento + espaco + "</th>" +
+                            abreTH + data      + espaco + "</th>" +
+                            abreTH + arquivo   + espaco + "</th>";
+            return linha;
         }
 
         public static string PrintaLinha(string titulo, string data, string arquivo)
         {
-            string linha = "|";
-
-            linha += AlinharCentro(titulo, largura1) + "|";
-            linha += AlinharCentro(data, largura2) + "|";
-            linha += AlinharCentro(arquivo, largura3) + "|";
-            linha += Environment.NewLine;
-            linha += PrintaSeparador(largura1 + largura2 + largura3 + 4);
-            linha += Environment.NewLine;
-
+            string linha =  abreTDEsquerda + titulo  + espaco + "</td>" +
+                            abreTD         + data    + espaco + "</td>" +
+                            abreTD         + arquivo + espaco + "</td>";
             return linha;
         }
 
         public static string PrintaLinha(string titulo, string documento, string data, string arquivo)
         {
-            string linha = "|";
-
-            linha += AlinharCentro(titulo, largura1) + "|";
-            linha += AlinharCentro(documento, largura4) + "|";
-            linha += AlinharCentro(data, largura2) + "|";
-            linha += AlinharCentro(arquivo, largura3) + "|";
-            linha += Environment.NewLine;
-            linha += PrintaSeparador(largura1 + largura2 + largura3 + largura4 + 4);
-            linha += Environment.NewLine;
-
+            string linha =  abreTDEsquerda + titulo    + espaco + "</td>" +
+                            abreTD         + documento + espaco + "</td>" +
+                            abreTD         + data      + espaco + "</td>" +
+                            abreTD         + arquivo   + espaco + "</td>";
             return linha;
-        }
-
-        public static string AlinharCentro(string texto, int largura)
-        {
-            texto = texto.Length > largura ? texto.Substring(0, largura - 3) + "..." : texto;
-
-            if (string.IsNullOrEmpty(texto))
-            {
-                return new string(' ', largura);
-            }
-            else
-            {
-                return texto.PadRight(largura - (largura - texto.Length) / 2).PadLeft(largura);
-            }
         }
     }
 }

@@ -5,9 +5,9 @@ namespace BcbCrawler.Util
 {
     class Email
     {
-        static readonly MailAddress fromAddress = new MailAddress("", "Luiz Sena");
-        static readonly MailAddress toAddress = new MailAddress("", "Time Basileia");
-        const string fromPassword = "";
+        static readonly MailAddress EmailDe = new MailAddress("sena.reve@gmail.com", "Luiz Sena");
+        static readonly MailAddress EmaiPara = new MailAddress("sena.reve@gmail.com", "Time Basileia");
+        const string fromPassword = "hknjnujdfmyujfyu";
 
         public static void EnviarEmail(string assunto, string textoEmail)
         {
@@ -18,16 +18,17 @@ namespace BcbCrawler.Util
                 EnableSsl = true,
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                Credentials = new NetworkCredential(EmailDe.Address, fromPassword)
             };
 
-            using (var message = new MailMessage(fromAddress, toAddress)
+            using (var msg = new MailMessage(EmailDe, EmaiPara)
             {
                 Subject = assunto,
                 Body = textoEmail
             })
             {
-                smtp.Send(message);
+                msg.IsBodyHtml = true;
+                smtp.Send(msg);
             }
         }
     }

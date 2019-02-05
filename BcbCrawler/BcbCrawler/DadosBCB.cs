@@ -44,7 +44,6 @@ namespace BcbCrawler
                         break;
                     }
 
-
                     Linhas[i] = new LinhaDadosBCB(linhaArray[0],
                                                   linhaArray[1],
                                                   linhaArray[2]);
@@ -69,8 +68,9 @@ namespace BcbCrawler
         {
             List<LinhaDadosBCB> linhasDiferentes = new List<LinhaDadosBCB>();
             int numeroDeLinhas = this.Linhas.Count();
+            int numeroDeLDados = dado.Linhas.Count();
 
-            for (int i = 0; i < numeroDeLinhas; i++)
+            for (int i = 0; i < numeroDeLDados; i++)
             {
                 LinhaDadosBCB linhaDado = dado.Linhas[i];
                 if (this.Linhas[i].Compara(linhaDado))
@@ -80,7 +80,7 @@ namespace BcbCrawler
             }
 
             //Ou seja, adicionaram novas linhas na tabela do site
-            if (numeroDeLinhas > dado.Linhas.Count())
+            if (numeroDeLinhas > numeroDeLDados)
             {
                 int numeroLinhasNovas = numeroDeLinhas - dado.Linhas.Count();
 
@@ -101,6 +101,8 @@ namespace BcbCrawler
         public string DataDoArquivo { get; private set; }
         public string LinkArquivo { get; private set; }
         public string Documento { get; private set; }
+
+        #region Construtores
 
         public LinhaDadosBCB(string titulo)
         {
@@ -125,6 +127,8 @@ namespace BcbCrawler
             LinkArquivo = linkArquivo;
             Documento = documento;
         }
+
+        #endregion
 
         public bool Compara(LinhaDadosBCB linhaDado)
         {

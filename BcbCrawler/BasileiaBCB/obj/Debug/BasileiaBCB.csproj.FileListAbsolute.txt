@@ -1,9 +1,0 @@
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\bin\Debug\BasileiaBCB.exe.config
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\bin\Debug\BasileiaBCB.exe
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\bin\Debug\BasileiaBCB.pdb
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.csprojAssemblyReference.cache
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.ProjectInstaller.resources
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.csproj.GenerateResource.cache
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.csproj.CoreCompileInputs.cache
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.exe
-C:\Users\3xBJ\source\repos\BcbCrawler\BasileiaBCB\obj\Debug\BasileiaBCB.pdb
