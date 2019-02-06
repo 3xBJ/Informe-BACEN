@@ -2,16 +2,16 @@
 using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
+using BcbCrawler.Util;
 
 namespace BcbCrawler
 {
     public class Crawler
     {
-       private const string leiauteDRM = "https://www.bcb.gov.br/fis/pstaw10/leiauteDRM.asp?frame=1";
-       private const string leiauteDDR = "https://www.bcb.gov.br/fis/pstaw10/leiauteDDR.asp?frame=1";
-       private const string leiauteDLO = "https://www.bcb.gov.br/fis/pstaw10/leiaute_limitesdlo.asp?frame=1";
-       private const string xPath = "//body[1]/div[1]/table[{0}]/tbody[1]/tr";
-
+        /*  TODO:
+         *  - passar html no lugar do tipo documento
+         *  
+         */
         public static IEnumerable<HtmlNodeCollection> RetornaNodeHTML(ETipoDocumento tipoDocumento, int numeroTabelas)
         {
             string paginaRenderizada = string.Empty;
@@ -20,11 +20,20 @@ namespace BcbCrawler
 
             using (ChromeDriver driver = new ChromeDriver(opcoes))
             {
-                string url = tipoDocumento == ETipoDocumento.DRM ? leiauteDRM : leiauteDDR;
+                //Isso aqui esta muito ruim, cria um monta obj tipoDocumento?
+                string url = string.Empty;
 
-                if (tipoDocumento == ETipoDocumento.DLO)
+                if (tipoDocumento == ETipoDocumento.DRM)
                 {
-                    url = leiauteDLO;
+                    url = ConstDadosCrawler.urlDRM;
+                }
+                else if (tipoDocumento == ETipoDocumento.DDR)
+                {
+                    url = ConstDadosCrawler.urlDDR;
+                }
+                else
+                {
+                    url = tipoDocumento == ETipoDocumento.DLO ? ConstDadosCrawler.urlDLO : ConstDadosCrawler.urlDLO2;
                 }
 
                 driver.Navigate().GoToUrl(url);
@@ -46,7 +55,7 @@ namespace BcbCrawler
             List<HtmlNodeCollection> noTabelas = new List<HtmlNodeCollection>();
             for (int i = 1; i < numeroTabelas + 1; i++)
             {
-                string path = string.Format(xPath, i);
+                string path = string.Format(ConstStringHtml.xPath, i);
                 yield return html.DocumentNode.SelectNodes(path);
             }
         }

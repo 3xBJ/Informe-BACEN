@@ -1,6 +1,5 @@
 ﻿using BcbCrawler.Util;
 using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,15 +9,6 @@ namespace BcbCrawler
 {
     class CriadorTabelas
     {
-        #region Fields
-
-        static readonly string abreTabela = "<table style = 'border-collapse: collapse; text-align: center'> ";
-        static readonly string abreTR = "<tr style = 'background-color: #dddddd'>";
-        static readonly string tituloTabela = "<h4> {0} </h4></br></br>";
-        static readonly string nomeBin = "RelatorioBCB_{0}_tabela{1}.bin";
-
-        #endregion
-
         public static bool VerificaMudanca(ETipoDocumento tipoDocumento, int numeroTabelas, string[] nomeTabelas, ref string textoTabelas)
         {
             Crawler.RetornaNodeHTML(tipoDocumento, numeroTabelas);
@@ -35,18 +25,25 @@ namespace BcbCrawler
             textoTabelas += string.Format(comeco, tipoDocumento);
             foreach (HtmlNodeCollection noTabela in Crawler.RetornaNodeHTML(tipoDocumento, numeroTabelas))
             {
-                string textoTabela = string.Format(tituloTabela, nomeTabelas[i]);
-                bool ehLinhaDeQuatro = nomeTabelas[i].Equals("Leiautes:") || nomeTabelas[i].Equals("Exemplos:");
                 int mudadas = 0;
 
-                i++;
+                string textoTabela = string.Format(ConstStringHtml.tituloTabela, nomeTabelas[i]);
+
+                //no objeto TipoDocumento, colocar os valores do i para qual a linha é de quatro!
+                bool ehLinhaDeQuatro = nomeTabelas[i].Equals(ConstDadosCrawler.nomeTabelasDLO[2])
+                                    || nomeTabelas[i].Equals(ConstDadosCrawler.nomeTabelasDLO[3])
+                                    || tipoDocumento == ETipoDocumento.DLO2;
+
+                //Não mova esse i++ de lugar!!
+                i++; 
+
                 if (noTabela == null)
                 {
                     textoTabela += Formatador.PrintaLinha("Erro na leitura do nó", "Verifique o serviço", "Tabela " + i.ToString());
                     break;
                 }
 
-                string nomeArquivo = string.Format(nomeBin, tipoDocumento, i);
+                string nomeArquivo = string.Format(ConstStringHtml.nomeBin, tipoDocumento, i);
 
                 DadosBCB dadosBCB = new DadosBCB(noTabela, tipoDocumento, ehLinhaDeQuatro);
 
@@ -65,19 +62,32 @@ namespace BcbCrawler
                         dadoRecuperadosBCB = (DadosBCB)binario.Deserialize(stream);
                     }
 
-                    textoTabela += abreTabela + abreTR;
+                    textoTabela += ConstStringHtml.abreTabela + ConstStringHtml.abreTR;
+
                     if (!ehLinhaDeQuatro)
                     {
-                        textoTabela += Formatador.PrintaCabecalho("Titulo", "Data do Arquivo", "Arquivo");
+                        textoTabela += Formatador.PrintaCabecalho(ConstDadosCrawler.cabecalho[0],
+                                                                  ConstDadosCrawler.cabecalho[1],
+                                                                  ConstDadosCrawler.cabecalho[2]);
+                    }
+                    else if(tipoDocumento == ETipoDocumento.DLO2)
+                    {
+                        textoTabela += Formatador.PrintaCabecalho(ConstDadosCrawler.cabecalhoDLO[0],
+                                                                  ConstDadosCrawler.cabecalhoDLO[1],
+                                                                  ConstDadosCrawler.cabecalhoDLO[2],
+                                                                  ConstDadosCrawler.cabecalhoDLO[3]);
                     }
                     else
                     {
-                        textoTabela += Formatador.PrintaCabecalho("Titulo", "Documento", "Data do Arquivo", "Arquivo");
+                        textoTabela += Formatador.PrintaCabecalho(ConstDadosCrawler.cabecalhoDLO2[0], 
+                                                                  ConstDadosCrawler.cabecalhoDLO2[1],
+                                                                  ConstDadosCrawler.cabecalhoDLO2[2],
+                                                                  ConstDadosCrawler.cabecalhoDLO2[3]);
                     }
+
                     textoTabela += "</tr>";
                     textoTabela += MontaTextoTabela(ref mudadas, dadosBCB, dadoRecuperadosBCB, ehLinhaDeQuatro);
                     textoTabela += "</table>";
-                    textoTabela += Environment.NewLine + Environment.NewLine;
                 }
 
                 using (Stream stream = File.OpenWrite(nomeArquivo))
@@ -92,7 +102,7 @@ namespace BcbCrawler
 
                     if (i == numeroTabelas && somaMudadas == 0)
                     {
-                        textoTabela = string.Format("Nenhuma alteração nas tabelas do {0}. </br>", tipoDocumento);
+                        textoTabela = string.Format(ConstStringHtml.nenuhmaAlteracao, tipoDocumento);
                     }
                 }
 

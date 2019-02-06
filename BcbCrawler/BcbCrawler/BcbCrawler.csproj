@@ -38,9 +38,6 @@
     <Reference Include="Abot, Version=1.6.0.5, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Abot.1.6.0.5\lib\net40\Abot.dll</HintPath>
     </Reference>
-    <Reference Include="AbotX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AbotX.1.3.81\lib\net40\AbotX.dll</HintPath>
-    </Reference>
     <Reference Include="AngleSharp, Version=0.9.9.0, Culture=neutral, PublicKeyToken=e83494dcdc6d31ea, processorArchitecture=MSIL">
       <HintPath>..\packages\AngleSharp.0.9.10\lib\net45\AngleSharp.dll</HintPath>
     </Reference>
@@ -52,9 +49,6 @@
     </Reference>
     <Reference Include="MathNet.Numerics, Version=4.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.5.1\lib\net461\MathNet.Numerics.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NReco.PhantomJS, Version=1.0.4.0, Culture=neutral, PublicKeyToken=f160d8c5e2ae66b6, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.PhantomJS.1.0.4\lib\net40\NReco.PhantomJS.dll</HintPath>
@@ -88,11 +82,12 @@
     <Compile Include="Crawler.cs" />
     <Compile Include="CriadorTabelas.cs" />
     <Compile Include="DadosBCB.cs" />
-    <Compile Include="ETipoDocumento.cs" />
+    <Compile Include="Util\ETipoDocumento.cs" />
     <Compile Include="FazTudo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\Email.cs" />
+    <Compile Include="Util\ConstDadosCrawler.cs" />
     <Compile Include="Util\Formatador.cs" />
+    <Compile Include="Util\ConstStringHtml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

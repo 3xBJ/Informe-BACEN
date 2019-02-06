@@ -1,22 +1,16 @@
 ﻿using BcbCrawler.Util;
 using System;
+using System.IO;
 
 namespace BcbCrawler
-{
+{    
     class FazTudo
     {
-        #region Fields
-        
-        private static readonly string[] nomeTabelasDDR = new string[1] { "Informações técnicas do documento 2011:" };
-        private static readonly string[] nomeTabelasDRM = new string[3] { "Informações técnicas (2040/2060):", "Esquemas de validação do DRM (2040/2060):", "Anexos e Instruções de Preenchimentos:" };
-        private static readonly string[] nomeTabelasDLO = new string[7] { "Instruções de preenchimento:", "Modelos:", "Leiautes:", "Exemplos:", "Esquemas de validação do DLO", "Críticas de processamento:",
-                                                      "RPS - Regime Prudencial Simplificado - Cooperativas"};
-
-        #endregion
+        static readonly string arquivoSaida = "EmailBasileia.html";
 
         static void Main(string[] args)
         {           
-            string textoEmail = string.Empty;
+            string textoArquivo = string.Empty;
             bool naoteveMudancas = true;
 
             ETipoDocumento[] listaRelatorios = (ETipoDocumento[])Enum.GetValues(typeof(ETipoDocumento));
@@ -24,27 +18,31 @@ namespace BcbCrawler
             foreach (ETipoDocumento tipoDocumento in listaRelatorios)
             {
                 int numeroTabelas = (int)tipoDocumento;
-                string[] nomeTabelas = tipoDocumento == ETipoDocumento.DDR ? nomeTabelasDDR : nomeTabelasDRM;
+
+                //Aqui esta com o mesmo problema do crawler, tem de ficar fazendo muito if!
+                //fazer uma vez e montar objeto é melhor
+                string[] nomeTabelas = tipoDocumento == ETipoDocumento.DDR ? ConstDadosCrawler.nomeTabelasDDR : ConstDadosCrawler.nomeTabelasDRM;
                 string textoTabela = string.Empty;
 
                 if (tipoDocumento == ETipoDocumento.DLO)
                 {
-                    nomeTabelas = nomeTabelasDLO;
+                    nomeTabelas = ConstDadosCrawler.nomeTabelasDLO;
                 }
 
                 bool tabelasMudaram = CriadorTabelas.VerificaMudanca(tipoDocumento, numeroTabelas, nomeTabelas, ref textoTabela);
                 naoteveMudancas = naoteveMudancas && !tabelasMudaram;
-                textoEmail += textoTabela;
+                textoArquivo += textoTabela;
             }
 
-            string assunto = "Houve mudanças nos relatórios!!!";
             if (naoteveMudancas)
             {
-                assunto = "Nenhuma mudança hoje.";
-                textoEmail += "<br><br><br><br><font color='red'> God's in his heaven. All's Right with the world.</font>";
+                textoArquivo = string.Empty;
             }
 
-            Email.EnviarEmail(assunto, textoEmail);
+            using (StreamWriter arquivo = new StreamWriter(arquivoSaida))
+            {
+                arquivo.Write(textoArquivo);
+            }
         }
     }
 }
