@@ -82,10 +82,12 @@
     <Compile Include="Crawler.cs" />
     <Compile Include="CriadorTabelas.cs" />
     <Compile Include="DadosBCB.cs" />
-    <Compile Include="Util\ETipoDocumento.cs" />
+    <Compile Include="Interfaces\IRelatorio.cs" />
+    <Compile Include="Util\DDR.cs" />
+    <Compile Include="Util\DLO.cs" />
+    <Compile Include="Util\DRM.cs" />
     <Compile Include="FazTudo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\ConstDadosCrawler.cs" />
     <Compile Include="Util\Formatador.cs" />
     <Compile Include="Util\ConstStringHtml.cs" />
   </ItemGroup>

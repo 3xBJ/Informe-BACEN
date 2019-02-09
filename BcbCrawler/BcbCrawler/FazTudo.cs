@@ -1,9 +1,10 @@
-﻿using BcbCrawler.Util;
-using System;
+﻿using BcbCrawler.Interfaces;
+using BcbCrawler.Util;
+using System.Collections.Generic;
 using System.IO;
 
 namespace BcbCrawler
-{    
+{
     class FazTudo
     {
         static readonly string arquivoSaida = "EmailBasileia.html";
@@ -13,23 +14,18 @@ namespace BcbCrawler
             string textoArquivo = string.Empty;
             bool naoteveMudancas = true;
 
-            ETipoDocumento[] listaRelatorios = (ETipoDocumento[])Enum.GetValues(typeof(ETipoDocumento));
-
-            foreach (ETipoDocumento tipoDocumento in listaRelatorios)
+            List<IRelatorio> listaRelatorios = new List<IRelatorio>
             {
-                int numeroTabelas = (int)tipoDocumento;
+                new DLO(),
+                new DDR(),
+                new DRM()
+            };
 
-                //Aqui esta com o mesmo problema do crawler, tem de ficar fazendo muito if!
-                //fazer uma vez e montar objeto é melhor
-                string[] nomeTabelas = tipoDocumento == ETipoDocumento.DDR ? ConstDadosCrawler.nomeTabelasDDR : ConstDadosCrawler.nomeTabelasDRM;
+            foreach (IRelatorio relatorio in listaRelatorios)
+            {
                 string textoTabela = string.Empty;
 
-                if (tipoDocumento == ETipoDocumento.DLO)
-                {
-                    nomeTabelas = ConstDadosCrawler.nomeTabelasDLO;
-                }
-
-                bool tabelasMudaram = CriadorTabelas.VerificaMudanca(tipoDocumento, numeroTabelas, nomeTabelas, ref textoTabela);
+                bool tabelasMudaram = CriadorTabelas.VerificaMudanca(relatorio, ref textoTabela);
                 naoteveMudancas = naoteveMudancas && !tabelasMudaram;
                 textoArquivo += textoTabela;
             }

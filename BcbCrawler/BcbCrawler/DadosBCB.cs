@@ -1,5 +1,5 @@
-﻿using BcbCrawler.Util;
-using HtmlAgilityPack;
+﻿using BcbCrawler.Interfaces;
+using BcbCrawler.Util;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,20 +10,20 @@ namespace BcbCrawler
     [Serializable]
     public class DadosBCB
     {
-        public ETipoDocumento TipoDocumento { get; private set; }
         public LinhaDadosBCB[] Linhas { get; private set; }
         public DateTime DataVerificacao;
 
-        public DadosBCB(HtmlNodeCollection html, ETipoDocumento tipoDocumento, bool linhaDeQuatro)
+        public DadosBCB(IRelatorio relatorio)
         {
-            TipoDocumento = tipoDocumento;
-            MontaLinha(html, linhaDeQuatro);
+            MontaLinha(relatorio);
             DataVerificacao = DateTime.Now;
         }
 
-        private void MontaLinha(HtmlNodeCollection html, bool linhaDeQuatro)
+        private void MontaLinha(IRelatorio relatorio)
         {
-            var linhasHtml = html.Skip(1).Select(tr => tr
+            int j = relatorio is DLO ? 0 : 1; 
+
+            var linhasHtml = relatorio.Html.Skip(j).Select(tr => tr
                 .Elements("td")
                 .Select(td => td.InnerText.Trim())
                 .ToArray());
@@ -32,7 +32,7 @@ namespace BcbCrawler
 
             Linhas = new LinhaDadosBCB[numeroDeLinhas];
 
-            if (!linhaDeQuatro)
+            if (!(relatorio is DLO))
             {
                 for (int i = 0; i < numeroDeLinhas; i++)
                 {
@@ -42,7 +42,7 @@ namespace BcbCrawler
                     if (linhaArray.Length == 1)
                     {
                         Linhas[i] = new LinhaDadosBCB(linhaArray[0]);
-                        break;
+                        continue;
                     }
 
                     Linhas[i] = new LinhaDadosBCB(linhaArray[0],
@@ -99,44 +99,48 @@ namespace BcbCrawler
     public class LinhaDadosBCB
     {
         public string Titulo { get; private set; }
-        public string DataDoArquivo { get; private set; }
-        public string LinkArquivo { get; private set; }
-        public string Documento { get; private set; }
+        public string Coluna2 { get; private set; }
+        public string Coluna3 { get; private set; }
+        public string Coluna4 { get; private set; }
+        
 
         #region Construtores
 
         public LinhaDadosBCB(string titulo)
         {
             Titulo = titulo;
-            DataDoArquivo = string.Empty;
-            LinkArquivo = string.Empty;
-            Documento = string.Empty;
+            Coluna3 = string.Empty;
+            Coluna4 = string.Empty;
+            Coluna2 = string.Empty;
         }
 
         public LinhaDadosBCB(string titulo, string dataDoArquivo, string linkArquivo)
         {
             Titulo = titulo;
-            DataDoArquivo = dataDoArquivo;
-            LinkArquivo = linkArquivo;
-            Documento = string.Empty;
+            Coluna2 = dataDoArquivo;
+            Coluna3 = linkArquivo;
+            Coluna4 = string.Empty;
         }
 
-        public LinhaDadosBCB(string titulo, string documento, string dataDoArquivo, string linkArquivo)
+        public LinhaDadosBCB(string titulo, string DataBaseInicio, string DataBaseFim, string DataDoArquivo)
         {
             Titulo = titulo;
-            DataDoArquivo = dataDoArquivo;
-            LinkArquivo = linkArquivo;
-            Documento = documento;
+            Coluna2 = DataBaseInicio;
+            Coluna3 = DataBaseFim;
+            Coluna4 = DataDoArquivo;
         }
 
         #endregion
 
         public bool Compara(LinhaDadosBCB linhaDado)
         {
-            return this.Titulo != linhaDado.Titulo ||
-                   this.LinkArquivo != linhaDado.LinkArquivo ||
-                   this.DataDoArquivo != linhaDado.DataDoArquivo ||
-                   this.Documento != linhaDado.Documento;
+                   
+            return this.Titulo  != linhaDado.Titulo  ||
+                   this.Coluna2 != linhaDado.Coluna2 ||
+                   this.Coluna3 != linhaDado.Coluna3 ||
+                   this.Coluna4 != linhaDado.Coluna4;
+
+
         }
     }
 }

@@ -8,7 +8,6 @@ C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\obj\Debug\BcbCrawler.csproj.Cop
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\obj\Debug\BcbCrawler.exe
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\obj\Debug\BcbCrawler.pdb
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\Abot.dll
-C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\AbotX.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\AngleSharp.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\log4net.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\MathNet.Numerics.dll
@@ -16,14 +15,11 @@ C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\NReco.PhantomJS.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\Portable.Licensing.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\Robots.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\Abot.xml
-C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\AbotX.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\AngleSharp.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\log4net.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\MathNet.Numerics.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\Portable.Licensing.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\WebDriver.dll
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\WebDriver.xml
-C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\NLog.dll
-C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\NLog.xml
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\3xBJ\source\repos\BcbCrawler\BcbCrawler\bin\Debug\HtmlAgilityPack.xml

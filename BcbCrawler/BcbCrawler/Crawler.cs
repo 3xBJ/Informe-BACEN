@@ -3,40 +3,22 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using BcbCrawler.Util;
+using BcbCrawler.Interfaces;
 
 namespace BcbCrawler
 {
     public class Crawler
     {
-        /*  TODO:
-         *  - passar html no lugar do tipo documento
-         *  
-         */
-        public static IEnumerable<HtmlNodeCollection> RetornaNodeHTML(ETipoDocumento tipoDocumento, int numeroTabelas)
+        public static IEnumerable<HtmlNodeCollection> RetornaNodeHTML(IRelatorio relatorio)
         {
             string paginaRenderizada = string.Empty;
+            
             ChromeOptions opcoes = new ChromeOptions();
             opcoes.AddArgument("--headless");
 
             using (ChromeDriver driver = new ChromeDriver(opcoes))
             {
-                //Isso aqui esta muito ruim, cria um monta obj tipoDocumento?
-                string url = string.Empty;
-
-                if (tipoDocumento == ETipoDocumento.DRM)
-                {
-                    url = ConstDadosCrawler.urlDRM;
-                }
-                else if (tipoDocumento == ETipoDocumento.DDR)
-                {
-                    url = ConstDadosCrawler.urlDDR;
-                }
-                else
-                {
-                    url = tipoDocumento == ETipoDocumento.DLO ? ConstDadosCrawler.urlDLO : ConstDadosCrawler.urlDLO2;
-                }
-
-                driver.Navigate().GoToUrl(url);
+                driver.Navigate().GoToUrl(relatorio.Url);
 
                 try
                 {
@@ -51,11 +33,10 @@ namespace BcbCrawler
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(paginaRenderizada);
 
-
             List<HtmlNodeCollection> noTabelas = new List<HtmlNodeCollection>();
-            for (int i = 1; i < numeroTabelas + 1; i++)
+            for (int i = 1; i < relatorio.NumeroTabelas + 1; i++)
             {
-                string path = string.Format(ConstStringHtml.xPath, i);
+                string path = string.Format(relatorio.XPath, relatorio is DLO ? relatorio.Classe[i - 1] : i.ToString());
                 yield return html.DocumentNode.SelectNodes(path);
             }
         }

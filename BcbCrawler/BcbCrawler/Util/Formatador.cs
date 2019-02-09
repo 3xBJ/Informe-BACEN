@@ -2,35 +2,28 @@
 {
     public static class Formatador
     {
-        public static string PrintaCabecalho(string campo1, string campo2, string campo3)
+        public static string PrintaCabecalho(string[] campos, int i = 0, string texto = "")
         {
-            return ConstStringHtml.abreTH + campo1 + ConstStringHtml.espaco + "</th>" +
-                   ConstStringHtml.abreTH + campo2 + ConstStringHtml.espaco + "</th>" +
-                   ConstStringHtml.abreTH + campo3 + ConstStringHtml.espaco + "</th>" ;
+            if (i == campos.Length) return texto;
+
+            texto += ConstStringHtml.abreTH + campos[i] + ConstStringHtml.espaco + "</th>";
+            i++;
+
+            return PrintaCabecalho(campos, i, texto);
         }
 
-        public static string PrintaCabecalho(string campo1, string campo2, string campo3, string campo4)
+        public static string PrintaLinha(LinhaDadosBCB campos)
         {
-            return  ConstStringHtml.abreTH + campo1 + ConstStringHtml.espaco + "</th>" +
-                    ConstStringHtml.abreTH + campo2 + ConstStringHtml.espaco + "</th>" +
-                    ConstStringHtml.abreTH + campo3 + ConstStringHtml.espaco + "</th>" +
-                    ConstStringHtml.abreTH + campo4 + ConstStringHtml.espaco + "</th>" ;
-        }
+            string texto = ConstStringHtml.abreTDEsquerda + campos.Titulo  + ConstStringHtml.espaco + "</td>" +
+                           ConstStringHtml.abreTD         + campos.Coluna2 + ConstStringHtml.espaco + "</td>" +
+                           ConstStringHtml.abreTD         + campos.Coluna3 + ConstStringHtml.espaco + "</td>";
 
-        public static string PrintaLinha(string campo1, string campo2, string campo3)
-        {
-            return ConstStringHtml.abreTDEsquerda + campo1 + ConstStringHtml.espaco + "</td>" +
-                   ConstStringHtml.abreTD         + campo2 + ConstStringHtml.espaco + "</td>" +
-                   ConstStringHtml.abreTD         + campo3 + ConstStringHtml.espaco + "</td>" ;
-        }
+            if (campos.Coluna4 != string.Empty)
+            {
+                texto += ConstStringHtml.abreTD + campos.Coluna4 + ConstStringHtml.espaco + "</td>";
+            }
 
-        public static string PrintaLinha(string campo1, string campo2, string campo3, string campo4)
-        {
-            return ConstStringHtml.abreTDEsquerda + campo1 + ConstStringHtml.espaco + "</td>" +
-                   ConstStringHtml.abreTD         + campo2 + ConstStringHtml.espaco + "</td>" +
-                   ConstStringHtml.abreTD         + campo3 + ConstStringHtml.espaco + "</td>" +
-                   ConstStringHtml.abreTD         + campo4 + ConstStringHtml.espaco + "</td>" ;
+            return texto;
         }
     }
 }
-
