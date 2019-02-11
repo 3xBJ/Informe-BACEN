@@ -99,19 +99,15 @@ namespace BcbCrawler
     public class LinhaDadosBCB
     {
         public string Titulo { get; private set; }
-        public string Coluna2 { get; private set; }
-        public string Coluna3 { get; private set; }
-        public string Coluna4 { get; private set; }
-        
+        public string Coluna2 { get; private set; } = string.Empty;
+        public string Coluna3 { get; private set; } = string.Empty;
+        public string Coluna4 { get; private set; } = string.Empty;
 
         #region Construtores
 
         public LinhaDadosBCB(string titulo)
         {
             Titulo = titulo;
-            Coluna3 = string.Empty;
-            Coluna4 = string.Empty;
-            Coluna2 = string.Empty;
         }
 
         public LinhaDadosBCB(string titulo, string dataDoArquivo, string linkArquivo)
@@ -119,7 +115,6 @@ namespace BcbCrawler
             Titulo = titulo;
             Coluna2 = dataDoArquivo;
             Coluna3 = linkArquivo;
-            Coluna4 = string.Empty;
         }
 
         public LinhaDadosBCB(string titulo, string DataBaseInicio, string DataBaseFim, string DataDoArquivo)
@@ -139,8 +134,6 @@ namespace BcbCrawler
                    this.Coluna2 != linhaDado.Coluna2 ||
                    this.Coluna3 != linhaDado.Coluna3 ||
                    this.Coluna4 != linhaDado.Coluna4;
-
-
         }
     }
 }

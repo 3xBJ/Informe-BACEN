@@ -1,7 +1,4 @@
-﻿using BcbCrawler.Interfaces;
-using BcbCrawler.Util;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace BcbCrawler
 {
@@ -10,30 +7,10 @@ namespace BcbCrawler
         static readonly string arquivoSaida = "EmailBasileia.html";
 
         static void Main(string[] args)
-        {           
-            string textoArquivo = string.Empty;
-            bool naoteveMudancas = true;
+        {
+            string textoArquivo = MontadorDeTextos.MontaTextoTabelas();
 
-            List<IRelatorio> listaRelatorios = new List<IRelatorio>
-            {
-                new DLO(),
-                new DDR(),
-                new DRM()
-            };
-
-            foreach (IRelatorio relatorio in listaRelatorios)
-            {
-                string textoTabela = string.Empty;
-
-                bool tabelasMudaram = CriadorTabelas.VerificaMudanca(relatorio, ref textoTabela);
-                naoteveMudancas = naoteveMudancas && !tabelasMudaram;
-                textoArquivo += textoTabela;
-            }
-
-            if (naoteveMudancas)
-            {
-                textoArquivo = string.Empty;
-            }
+            textoArquivo += MontadorDeTextos.MontaTexoNormas();
 
             using (StreamWriter arquivo = new StreamWriter(arquivoSaida))
             {
