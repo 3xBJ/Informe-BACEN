@@ -1,9 +1,13 @@
 # Informe-BACEN
+O objetivo do projeto é recuperar informações pertinentes do site do BACEN, evitando o gasto temporal de recursos humanos para verificar em diferentes fontes um conjunto de informações.
 
-Pega informações de tabela e textos do site do BACEN, verifica diferenças com os da última consula e salva os dados novos em um arquivo .html.
+## Built With
 
-#### TODO:
-- [ ] Melhorar formatação;
-- [ ] Assunto não esta aparecendo.
+* [Selenium](https://www.seleniumhq.org/) - Para renderizar a página do Banco Central
+* [HtmlAgilityPack](https://html-agility-pack.net/) - Web scraping
 
+## TODO:
+- [ ] ?????
+
+## License
 ###### License do what you want cause a pirate is free.
