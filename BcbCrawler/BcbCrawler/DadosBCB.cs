@@ -98,7 +98,7 @@ namespace BcbCrawler
     [Serializable]
     public class LinhaDadosBCB
     {
-        public string Titulo { get; private set; }
+        public string Titulo  { get; private set; }
         public string Coluna2 { get; private set; } = string.Empty;
         public string Coluna3 { get; private set; } = string.Empty;
         public string Coluna4 { get; private set; } = string.Empty;

@@ -3,7 +3,7 @@ using HtmlAgilityPack;
 
 namespace BcbCrawler.Util
 {
-    class DDR : IRelatorio
+    public class DDR : IRelatorio
     {
         #region Fields
 

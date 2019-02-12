@@ -24,7 +24,7 @@ namespace BcbCrawler
                 {
                     //A pagina das normas carrega uma pag antes da final
                     //precia esperar se não ele não recupera o html correto
-                    System.Threading.Thread.Sleep(1);
+                    System.Threading.Thread.Sleep(1000);
                     paginaRenderizada = driver.PageSource;
                 }
                 catch (Exception e)

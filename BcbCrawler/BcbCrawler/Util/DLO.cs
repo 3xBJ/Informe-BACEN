@@ -29,11 +29,11 @@ namespace BcbCrawler.Util
 
         #endregion
 
+        public string Nome => nome;
+
         public string Url => url;
 
         public string XPath => xPath;
-
-        public string[] Classe => classe;
 
         public string[] NomeTabelas => nomeTabelas;
 
@@ -41,8 +41,8 @@ namespace BcbCrawler.Util
        
         public int NumeroTabelas => numeroTabelas;
 
-        public HtmlNodeCollection Html { get; set; }
+        public string[] Classe => classe;
 
-        public string Nome => nome;
+        public HtmlNodeCollection Html { get; set; }
     }
 }

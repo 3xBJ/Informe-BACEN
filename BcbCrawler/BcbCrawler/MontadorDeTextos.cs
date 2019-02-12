@@ -24,20 +24,36 @@ namespace BcbCrawler
 
             foreach (IRelatorio relatorio in listaRelatorios)
             {
-                textoArquivo.Append(MontaTabelasESalvaArquivo(relatorio));
+                int tentativas = 0;
+                StringBuilder textoTabelas = new StringBuilder();
+                BinaryFormatter binario = new BinaryFormatter();
+
+                textoTabelas.Append(string.Format(ConstStringHtml.tituloEUrl, relatorio.Nome, relatorio.Url));
+
+                string texto = MontaTabelasESalvaArquivos(relatorio, textoTabelas, binario);
+
+                while (texto == string.Empty)
+                {
+                    if (tentativas == 5)
+                    {
+                        texto = "Erro durante a montagem do " + relatorio.Nome;
+                        break;
+                    }
+
+                    texto = MontaTabelasESalvaArquivos(relatorio, textoTabelas, binario);
+                    tentativas++;
+                }
+
+                textoArquivo.Append(texto);
             }
 
             return textoArquivo.ToString();
         }
 
-        public static string MontaTabelasESalvaArquivo(IRelatorio relatorio)
+        private static string MontaTabelasESalvaArquivos(IRelatorio relatorio, StringBuilder textoTabelas, BinaryFormatter binario)
         {
             int i = 0;
             int somaMudadas = 0;
-            StringBuilder textoTabelas = new StringBuilder();
-            BinaryFormatter binario = new BinaryFormatter();
-
-            textoTabelas.Append(string.Format(ConstStringHtml.tituloEUrl, relatorio.Nome, relatorio.Url));
 
             foreach (HtmlNodeCollection noTabela in Crawler.RetornaNodeRelatorio(relatorio))
             {
@@ -50,9 +66,7 @@ namespace BcbCrawler
 
                 if (noTabela == null)
                 {
-                    textoTabela.Append(Formatador.PrintaLinha(new LinhaDadosBCB("Erro na leitura do nó", "Verifique o serviço", "Tabela " + i.ToString())));
-                    somaMudadas++;
-                    continue;
+                    return string.Empty;
                 }
 
                 relatorio.Html = noTabela;
@@ -107,10 +121,18 @@ namespace BcbCrawler
 
         public static StringBuilder MontaTexoNormas()
         {
+            int l = 0;
             BinaryFormatter binario = new BinaryFormatter();
             HtmlNodeCollection noNormas = Crawler.RetornaNodeNormas(out string url);
             StringBuilder textoFinal = new StringBuilder(string.Format(ConstStringHtml.tituloEUrl, "Normas", url));
             
+            while(noNormas == null)
+            {
+                noNormas = Crawler.RetornaNodeNormas(out url);
+                if (l == 5) break;
+                l++;
+            }
+
             string[] linhasHtml = noNormas.Select(ol => ol
                     .Elements("li")
                     .Select(li => li.InnerText.Trim())
@@ -118,10 +140,12 @@ namespace BcbCrawler
 
             foreach (string texto in linhasHtml)
             {
-                string comunicado = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[0], ConstNormas.camposNorma[1], texto);
-                string dataHora = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[1], ConstNormas.camposNorma[2], texto);
-                string assunto = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[2], ConstNormas.camposNorma[3], texto);
-                string responsavel = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[3], texto);
+                string textoNorma = texto.Replace(".", ". ");
+
+                string comunicado = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[0], ConstNormas.camposNorma[1], textoNorma);
+                string dataHora = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[1], ConstNormas.camposNorma[2], textoNorma);
+                string assunto = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[2], ConstNormas.camposNorma[3], textoNorma);
+                string responsavel = Formatador.RetornaTextoIntervalo(ConstNormas.camposNorma[3], textoNorma);
 
                 Norma norma = new Norma(comunicado, dataHora, assunto, responsavel);
 
