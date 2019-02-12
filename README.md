@@ -1,5 +1,5 @@
 # Informe-BACEN
-O objetivo do projeto é recuperar informações pertinentes do site do BACEN, evitando o gasto temporal de recursos humanos para verificar em diferentes fontes um conjunto de informações.
+O objetivo do projeto é recuperar informações pertinentes do site do BACEN, evitando o gasto temporal de recursos humanos para verificar, em diferentes fontes, um conjunto de informações.
 
 ## Built With
 
