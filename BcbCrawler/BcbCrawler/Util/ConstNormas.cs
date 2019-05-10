@@ -8,7 +8,7 @@ namespace BcbCrawler.Util
 {
     static class ConstNormas
     {
-        public const string xPathDoc = "//ol[@start='1']";
+        public const string xPathDoc = "//ol[@class='list-unstyled']";
 
         public const string nome     = "Normas:";
 

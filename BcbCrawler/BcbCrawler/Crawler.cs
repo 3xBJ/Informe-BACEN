@@ -1,4 +1,5 @@
 ﻿using BcbCrawler.Interfaces;
+using BcbCrawler.Relatorios;
 using BcbCrawler.Util;
 using HtmlAgilityPack;
 using OpenQA.Selenium.Chrome;
@@ -9,7 +10,10 @@ namespace BcbCrawler
 {
     public class Crawler
     {
-        private static string RetornaPaginaRenderizada(string url)
+        private string paginaRenderizada = string.Empty;
+        private string paginaNormas = string.Empty;
+
+        private string RetornaPaginaRenderizada(string url)
         {
             string paginaRenderizada = string.Empty;
 
@@ -19,11 +23,11 @@ namespace BcbCrawler
             using (ChromeDriver driver = new ChromeDriver(opcoes))
             {
                 driver.Navigate().GoToUrl(url);
-                
+
                 try
                 {
                     //A pagina das normas carrega uma pag antes da final
-                    //precia esperar se não ele não recupera o html correto
+                    //se não esperar ele recupera o HTML errado.
                     System.Threading.Thread.Sleep(1000);
                     paginaRenderizada = driver.PageSource;
                 }
@@ -36,9 +40,12 @@ namespace BcbCrawler
             return paginaRenderizada;
         }
 
-        public static IEnumerable<HtmlNodeCollection> RetornaNodeRelatorio(IRelatorio relatorio)
+        public IEnumerable<HtmlNodeCollection> RetornaNodeRelatorio(IRelatorio relatorio)
         {
-            string paginaRenderizada = RetornaPaginaRenderizada(relatorio.Url);
+            if (string.IsNullOrEmpty(paginaRenderizada))
+            {
+                paginaRenderizada = RetornaPaginaRenderizada(relatorio.Url);
+            }
 
             HtmlDocument html = new HtmlDocument();
             html.LoadHtml(paginaRenderizada);
@@ -46,22 +53,24 @@ namespace BcbCrawler
             List<HtmlNodeCollection> noTabelas = new List<HtmlNodeCollection>();
             for (int i = 1; i < relatorio.NumeroTabelas + 1; i++)
             {
-                string path = string.Format(relatorio.XPath, relatorio is DLO ? relatorio.Classe[i - 1] : i.ToString());
+                string path = string.Format(relatorio.XPath, relatorio is DLO ? i - 1 : i);
+
                 yield return html.DocumentNode.SelectNodes(path);
             }
         }
 
-        public static HtmlNodeCollection RetornaNodeNormas(out string url)
+        public HtmlNodeCollection RetornaNodeNormas(out string url)
         {
             DateTime hoje = DateTime.Now;
             hoje = hoje.AddDays(-2);
             DateTime diaInicial = hoje.DayOfWeek.Equals(DayOfWeek.Monday) ? hoje.AddDays(-3) : hoje.AddDays(-1);
 
             url = string.Format(ConstNormas.url, diaInicial.Day, diaInicial.Month, diaInicial.Year, hoje.Day, hoje.Month, hoje.Year);
-            string paginaRenderizada = RetornaPaginaRenderizada(url);
+
+            paginaNormas = RetornaPaginaRenderizada(url);
 
             HtmlDocument html = new HtmlDocument();
-            html.LoadHtml(paginaRenderizada);
+            html.LoadHtml(paginaNormas);
 
             List<HtmlNodeCollection> noTabelas = new List<HtmlNodeCollection>();
 

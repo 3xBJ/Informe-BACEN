@@ -14,8 +14,6 @@ namespace BcbCrawler.Interfaces
 
         string[] Cabecalho { get; }
 
-        string[] Classe { get; }
-
         int NumeroTabelas { get; }
 
         HtmlNodeCollection Html { get; set; }

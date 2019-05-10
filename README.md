@@ -3,6 +3,7 @@ O objetivo do projeto é recuperar informações pertinentes do site do BACEN, e
 
 ## Execução
 
+* Carrega as informações das páginas dos relatórios;
 * Compara informações do dia anterior com as de hoje;
 * Gera arquivos serializados (.bin) com as informações de hoje;
 * Cria arquivo .html com as diferenças.

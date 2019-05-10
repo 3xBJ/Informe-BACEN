@@ -1,7 +1,7 @@
 ﻿using BcbCrawler.Interfaces;
 using HtmlAgilityPack;
 
-namespace BcbCrawler.Util
+namespace BcbCrawler.Relatorios
 {
     public class DLO : IRelatorio
     {
@@ -11,12 +11,7 @@ namespace BcbCrawler.Util
 
         private const string url = "https://www.bcb.gov.br/estabilidadefinanceira/leiautedoc2061e2071";
 
-        private const string xPath = "//div[@class='{0}']//tbody//tr";
-
-        private string[] classe = new string[3] { "ExternalClassBB69604781914FED9C6294E519F58EE6" ,
-                                                  "ExternalClassFE28F6BFF2C649438133F7343E9969A9",
-                                                  "ExternalClass2B89B04033534D30B6311E296228A55E"
-                                                };
+        private const string xPath = "//table[@id='tableatual_{0}']//tbody";
 
         private readonly string[] nomeTabelas = new string[4] { "Informações técnicas:",
                                                                 "RPS - Regime Prudencial Simplificado - S5",
@@ -41,8 +36,6 @@ namespace BcbCrawler.Util
         public string[] Cabecalho => cabecalho;
        
         public int NumeroTabelas => numeroTabelas;
-
-        public string[] Classe => classe;
 
         public HtmlNodeCollection Html { get; set; }
     }

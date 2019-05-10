@@ -1,4 +1,5 @@
 ﻿using BcbCrawler.Interfaces;
+using BcbCrawler.Relatorios;
 using BcbCrawler.Util;
 using System;
 using System.Collections.Generic;
@@ -19,21 +20,44 @@ namespace BcbCrawler
             DataVerificacao = DateTime.Now;
         }
 
-        private void MontaLinha(IRelatorio relatorio)
+        private void MontaLinhaDLO(DLO relatorio)
         {
-            int j = relatorio is DLO ? 0 : 1; 
-
-            var linhasHtml = relatorio.Html.Skip(j).Select(tr => tr
-                .Elements("td")
-                .Select(td => td.InnerText.Trim())
+            var linhasHtml = relatorio.Html.Select(tr => tr.Elements("tr")).First()
+                .Select(td => td.Elements("td")
+                .Select(tj => tj.InnerText.Trim())
                 .ToArray());
-
             int numeroDeLinhas = linhasHtml.Count();
 
             Linhas = new LinhaDadosBCB[numeroDeLinhas];
 
-            if (!(relatorio is DLO))
+            for (int i = 0; i < numeroDeLinhas; i++)
             {
+                string[] linhaArray = linhasHtml.ElementAt(i);
+
+                Linhas[i] = new LinhaDadosBCB(linhaArray[0],
+                                              linhaArray[1],
+                                              linhaArray[2],
+                                              linhaArray[3]);
+            }
+
+        }
+        private void MontaLinha(IRelatorio relatorio)
+        {
+            if (relatorio is DLO)
+            {
+                this.MontaLinhaDLO(relatorio as DLO);
+            }
+            else
+            {
+                var linhasHtml = relatorio.Html.Skip(1).Select(tr => tr
+                    .Elements("td")
+                    .Select(td => td.InnerText.Trim())
+                    .ToArray());
+
+                int numeroDeLinhas = linhasHtml.Count();
+
+                Linhas = new LinhaDadosBCB[numeroDeLinhas];
+
                 for (int i = 0; i < numeroDeLinhas; i++)
                 {
                     string[] linhaArray = linhasHtml.ElementAt(i);
@@ -50,19 +74,6 @@ namespace BcbCrawler
                                                   linhaArray[2]);
                 }
             }
-            else
-            {
-                for (int i = 0; i < numeroDeLinhas; i++)
-                {
-                    string[] linhaArray = linhasHtml.ElementAt(i);
-
-                    Linhas[i] = new LinhaDadosBCB(linhaArray[0],
-                                                  linhaArray[1],
-                                                  linhaArray[2],
-                                                  linhaArray[3]);
-                }
-            }
-
         }
 
         public List<LinhaDadosBCB> RetonaListaDiferentes(DadosBCB dado)
@@ -71,26 +82,24 @@ namespace BcbCrawler
             int numeroDeLinhas = this.Linhas.Count();
             int numeroDeLDados = dado.Linhas.Count();
 
-            for (int i = 0; i < numeroDeLDados; i++)
+            if (numeroDeLinhas == numeroDeLDados)
             {
-                LinhaDadosBCB linhaDado = dado.Linhas[i];
-                if (this.Linhas[i].Compara(linhaDado))
+                for (int i = 0; i < numeroDeLDados; i++)
                 {
-                    linhasDiferentes.Add(linhaDado);
+                    LinhaDadosBCB linhaDado = dado.Linhas[i];
+                    if (this.Linhas[i].Compara(linhaDado))
+                    {
+                        linhasDiferentes.Add(linhaDado);
+                    }
                 }
             }
-
-            //Ou seja, adicionaram novas linhas na tabela do site
-            if (numeroDeLinhas > numeroDeLDados)
+            else//adicionaram ou removeram linhas, vou notificar todas
             {
-                int numeroLinhasNovas = numeroDeLinhas - dado.Linhas.Count();
-
-                for (int i = 1; i < numeroLinhasNovas + 1; i++)
+                for (int i = 0; i < numeroDeLDados; i++)
                 {
-                    linhasDiferentes.Add(dado.Linhas[numeroDeLinhas + i]);
+                    linhasDiferentes.Add(dado.Linhas[i]);
                 }
             }
-
             return linhasDiferentes;
         }
     }
@@ -98,7 +107,7 @@ namespace BcbCrawler
     [Serializable]
     public class LinhaDadosBCB
     {
-        public string Titulo  { get; private set; }
+        public string Titulo { get; private set; }
         public string Coluna2 { get; private set; } = string.Empty;
         public string Coluna3 { get; private set; } = string.Empty;
         public string Coluna4 { get; private set; } = string.Empty;
@@ -129,8 +138,8 @@ namespace BcbCrawler
 
         public bool Compara(LinhaDadosBCB linhaDado)
         {
-                   
-            return this.Titulo  != linhaDado.Titulo  ||
+
+            return this.Titulo != linhaDado.Titulo ||
                    this.Coluna2 != linhaDado.Coluna2 ||
                    this.Coluna3 != linhaDado.Coluna3 ||
                    this.Coluna4 != linhaDado.Coluna4;

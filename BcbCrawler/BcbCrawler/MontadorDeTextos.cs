@@ -1,4 +1,5 @@
 ﻿using BcbCrawler.Interfaces;
+using BcbCrawler.Relatorios;
 using BcbCrawler.Util;
 using HtmlAgilityPack;
 using System.Collections.Generic;
@@ -54,8 +55,9 @@ namespace BcbCrawler
         {
             int i = 0;
             int somaMudadas = 0;
+            Crawler crawler = new Crawler();
 
-            foreach (HtmlNodeCollection noTabela in Crawler.RetornaNodeRelatorio(relatorio))
+            foreach (HtmlNodeCollection noTabela in crawler.RetornaNodeRelatorio(relatorio))
             {
                 int mudadas = 0;
 
@@ -122,13 +124,14 @@ namespace BcbCrawler
         public static StringBuilder MontaTexoNormas()
         {
             int l = 0;
+            Crawler crawler = new Crawler();
             BinaryFormatter binario = new BinaryFormatter();
-            HtmlNodeCollection noNormas = Crawler.RetornaNodeNormas(out string url);
+            HtmlNodeCollection noNormas = crawler.RetornaNodeNormas(out string url);
             StringBuilder textoFinal = new StringBuilder(string.Format(ConstStringHtml.tituloEUrl, "Normas", url));
             
             while(noNormas == null)
             {
-                noNormas = Crawler.RetornaNodeNormas(out url);
+                noNormas = crawler.RetornaNodeNormas(out url);
                 if (l == 5) break;
                 l++;
             }
